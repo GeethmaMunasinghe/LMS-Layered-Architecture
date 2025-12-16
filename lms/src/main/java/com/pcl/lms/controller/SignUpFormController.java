@@ -2,8 +2,12 @@ package com.pcl.lms.controller;
 
 import com.pcl.lms.DB.Database;
 import com.pcl.lms.DB.DbConnection;
+import com.pcl.lms.bo.BoFactory;
+import com.pcl.lms.bo.custom.UserBo;
+import com.pcl.lms.dto.request.RequestUserDto;
 import com.pcl.lms.env.StaticResource;
 import com.pcl.lms.model.User;
+import com.pcl.lms.util.BoType;
 import com.pcl.lms.util.security.PasswordManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -30,6 +34,7 @@ public class SignUpFormController {
     public TextField txtAge;
     public TextField txtEmail;
     public PasswordField txtPassword;
+    UserBo user= BoFactory.getInstance().getBo(BoType.USER);
     public void initialize(){
         setStaticData();
     }
@@ -47,30 +52,25 @@ public class SignUpFormController {
         String email=txtEmail.getText();
         String fullname=txtFullName.getText();
         int age= Integer.parseInt(txtAge.getText());
-        String password=new PasswordManager().encode(txtPassword.getText());
+        String password=txtPassword.getText();
 
-        User user=new User(fullname,email,age,password);
-        try{
-            signup(user);
-            System.out.println(user.toString());
+        try {
+            boolean isSaved=user.registerUser(new RequestUserDto(
+                    email,
+                    fullname,
+                    age,
+                    password
+            ));
+            if (isSaved){
+                new Alert(Alert.AlertType.INFORMATION,"Account Created").show();
+                setUI("LoginForm");
+            }else {
+                new Alert(Alert.AlertType.ERROR,"Registration failed...").show();
+            }
 
-            new Alert(Alert.AlertType.INFORMATION,"Account Created").show();
-            setUI("LoginForm");
-        }catch (ClassNotFoundException|SQLException e){
-            e.printStackTrace();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
-    }
-    private boolean signup(User user) throws ClassNotFoundException, SQLException {
-        Connection connection=DbConnection.getInstance().getConnection();
-        String sql="INSERT INTO user VALUES(?,?,?,?)"; //Blind parameters
-
-        PreparedStatement ps=connection.prepareStatement(sql);
-        ps.setString(1,user.getEmail());
-        ps.setString(2,user.getFullName());
-        ps.setInt(3,user.getAge());
-        ps.setString(4,user.getPassword());
-
-        return ps.executeUpdate()>0; //affected rows count
     }
     private void setUI(String location) throws IOException {
         Stage stage=(Stage) context.getScene().getWindow();
