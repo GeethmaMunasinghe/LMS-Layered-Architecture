@@ -6,6 +6,7 @@ import com.pcl.lms.entity.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -43,7 +44,21 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findByEmail(String email) {
+    public User findByEmail(String email) throws SQLException, ClassNotFoundException {
+        Connection connection=DbConnection.getInstance().getConnection();
+        PreparedStatement ps=connection.prepareStatement("SELECT * FROM user WHERE email=?");
+        ps.setString(1,email);
+        ResultSet set=ps.executeQuery();
+
+        if (set.next()){
+            return new User(
+               set.getString("email"),
+               set.getString("full_name"),
+               set.getInt("age"),
+               set.getString("password")
+            );
+        }
         return null;
+
     }
 }
