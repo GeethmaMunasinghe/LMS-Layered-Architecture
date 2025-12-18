@@ -5,6 +5,7 @@ import com.pcl.lms.DB.DbConnection;
 import com.pcl.lms.bo.BoFactory;
 import com.pcl.lms.bo.custom.impl.StudentBoImpl;
 import com.pcl.lms.dto.request.RequestStudentDto;
+import com.pcl.lms.dto.response.ResponesStudentDto;
 import com.pcl.lms.model.Student;
 import com.pcl.lms.tm.StudentTM;
 import com.pcl.lms.util.BoType;
@@ -28,6 +29,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 public class StudentManagementFormController {
@@ -83,8 +85,20 @@ public class StudentManagementFormController {
 
     private void setTableData(String newValue) {
         try {
-            ObservableList<StudentTM> students=studentBo.getStudents(newValue);
-            tblStudent.setItems(students);
+            List<ResponesStudentDto> students=studentBo.getStudents(newValue);
+            ObservableList<StudentTM> studentTmObservableList=FXCollections.observableArrayList();
+
+            for (ResponesStudentDto st:students){
+                Button btnDelete=new Button("Delete");
+                studentTmObservableList.add(new StudentTM(
+                        st.getId(),
+                        st.getName(),
+                        st.getAddress(),
+                        st.getDob(),
+                        btnDelete
+                ));
+            }
+            tblStudent.setItems(studentTmObservableList);
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

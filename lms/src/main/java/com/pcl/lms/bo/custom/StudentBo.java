@@ -7,9 +7,10 @@ import com.pcl.lms.tm.StudentTM;
 import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface StudentBo extends SuperBo {
     public boolean saveStudent(RequestStudentDto requestStudentDto) throws SQLException, ClassNotFoundException;
-    public ObservableList<StudentTM> getStudents(String searchText) throws SQLException, ClassNotFoundException;
+    public List<ResponesStudentDto> getStudents(String searchText) throws SQLException, ClassNotFoundException;
 
 }

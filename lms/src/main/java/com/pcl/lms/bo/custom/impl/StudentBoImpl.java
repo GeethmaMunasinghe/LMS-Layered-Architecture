@@ -4,6 +4,7 @@ import com.pcl.lms.bo.custom.StudentBo;
 import com.pcl.lms.dao.DaoFactory;
 import com.pcl.lms.dao.custom.impl.StudentDaoImpl;
 import com.pcl.lms.dto.request.RequestStudentDto;
+import com.pcl.lms.dto.response.ResponesStudentDto;
 import com.pcl.lms.entity.Student;
 import com.pcl.lms.env.Session;
 import com.pcl.lms.tm.StudentTM;
@@ -31,19 +32,19 @@ public class StudentBoImpl implements StudentBo {
     }
 
     @Override
-    public ObservableList<StudentTM> getStudents(String searchText) throws SQLException, ClassNotFoundException {
+    public List<ResponesStudentDto> getStudents(String searchText) throws SQLException, ClassNotFoundException {
         List<Student> students =studentDao.findByName(searchText);
-        ObservableList<StudentTM> studentTms= FXCollections.observableArrayList();
+        List<ResponesStudentDto> responesStudentDtoList= FXCollections.observableArrayList();
         for (Student student:students){
-            Button btn=new Button("Student");
-            studentTms.add(new StudentTM(
+
+            responesStudentDtoList.add(new ResponesStudentDto(
                 student.getId(),
                     student.getName(),
                     student.getAddress(),
-                    new SimpleDateFormat("yyyy-MM-dd").format(student.getDob()),
-                    btn
+                    student.getDob().toString(),
+                    student.getUser_email()
             ));
         }
-        return studentTms;
+        return responesStudentDtoList;
     }
 }
