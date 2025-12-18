@@ -1,5 +1,6 @@
 package com.pcl.lms.bo;
 
+import com.pcl.lms.bo.custom.impl.StudentBoImpl;
 import com.pcl.lms.bo.custom.impl.UserBoImpl;
 import com.pcl.lms.util.BoType;
 
@@ -18,6 +19,8 @@ public class BoFactory {
         switch (boType){
             case USER:
                 return(T) new UserBoImpl();
+            case STUDENT:
+                return (T) new StudentBoImpl();
             default:
                 return null;
         }

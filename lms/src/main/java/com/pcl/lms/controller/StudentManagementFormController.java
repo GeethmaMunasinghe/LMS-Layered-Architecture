@@ -2,8 +2,12 @@ package com.pcl.lms.controller;
 
 import com.pcl.lms.DB.Database;
 import com.pcl.lms.DB.DbConnection;
+import com.pcl.lms.bo.BoFactory;
+import com.pcl.lms.bo.custom.impl.StudentBoImpl;
+import com.pcl.lms.dto.request.RequestStudentDto;
 import com.pcl.lms.model.Student;
 import com.pcl.lms.tm.StudentTM;
+import com.pcl.lms.util.BoType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -43,6 +47,7 @@ public class StudentManagementFormController {
     public TableColumn<StudentTM,Button> colOption;
     String searchText="";
     String userEmail;
+    StudentBoImpl studentBo= BoFactory.getInstance().getBo(BoType.STUDENT);
 
     public void initialize(){
         colID.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -78,43 +83,10 @@ public class StudentManagementFormController {
 
     private void setTableData(String newValue) {
         try {
-            ArrayList<Student> studentList =fetchStudentData(searchText);
-
-            ObservableList<StudentTM> studentTM= FXCollections.observableArrayList();
-            for (Student st:studentList){
-
-                    Button btn=new Button("Delete");
-                    StudentTM tm=new StudentTM(
-                            st.getStudentId(),
-                            st.getStudentName(),
-                            st.getStudentAddress(),
-                            new SimpleDateFormat("yyyy-MM-dd").format(st.getDob()),
-                            btn
-                    );
-                    btn.setOnAction(event->{
-                        Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to delete ",
-                                ButtonType.YES,ButtonType.NO);
-                        alert.showAndWait();
-
-                        if (alert.getResult()==ButtonType.YES){
-                            try{
-                                boolean isDelete=deleteStudent(st);
-                                new Alert(Alert.AlertType.INFORMATION,"Deleted Successfully...").show();
-                                setTableData(searchText);
-                                setStudentId();
-                            }catch (SQLException|ClassNotFoundException e){
-                                e.printStackTrace();
-                            }
-
-                        }
-                    });
-                    studentTM.add(tm);
-
-
-            }
-            tblStudent.setItems(studentTM);
-        }catch (SQLException|ClassNotFoundException e){
-            e.printStackTrace();
+            ObservableList<StudentTM> students=studentBo.getStudents(newValue);
+            tblStudent.setItems(students);
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
     }
@@ -141,15 +113,15 @@ public class StudentManagementFormController {
     }
 
     public void saveOnAction(ActionEvent actionEvent) {
-        Student student=new Student(
-                txtStudentID.getText(),
-                txtStudentName.getText(),
-                txtAddress.getText(),
-                Date.from(dteDOB.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant())
-        );
         try {
             if (btnSave.getText().equals("Save")){
-                boolean isSaved=saveStudent(student,userEmail);
+                boolean isSaved=studentBo.saveStudent(new RequestStudentDto(
+                        txtStudentID.getText(),
+                        txtStudentName.getText(),
+                        txtAddress.getText(),
+                        Date.from(dteDOB.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant())
+                        )
+                );
                 if (isSaved){
                     setStudentId();
                     clearFields();
@@ -157,13 +129,13 @@ public class StudentManagementFormController {
                     setTableData(searchText);
                 }
             }else {
-                if (updateStudent(student,userEmail)){
+                /*if (updateStudent(student,userEmail)){
                     new Alert(Alert.AlertType.INFORMATION,"Student updated").show();
                     setStudentId();
                     clearFields();
                     setTableData(searchText);
                     btnSave.setText("Save");
-                }
+                }*/
             }
         }catch (SQLException|ClassNotFoundException e){
             e.printStackTrace();

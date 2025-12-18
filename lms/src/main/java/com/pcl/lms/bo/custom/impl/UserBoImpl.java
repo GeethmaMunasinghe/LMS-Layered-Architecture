@@ -6,6 +6,7 @@ import com.pcl.lms.dao.custom.impl.UserDaoImpl;
 import com.pcl.lms.dto.request.RequestUserDto;
 import com.pcl.lms.dto.response.ResponseUserDto;
 import com.pcl.lms.entity.User;
+import com.pcl.lms.env.Session;
 import com.pcl.lms.util.DaoType;
 import com.pcl.lms.util.security.PasswordManager;
 
@@ -33,6 +34,7 @@ public class UserBoImpl implements UserBo {
         User selectedUser=user.findByEmail(email);
         if (selectedUser!=null){
             if (new PasswordManager().check(password,selectedUser.getPassword())){
+                Session.setEmail(email);
                 return new ResponseUserDto(
                         selectedUser.getEmail(),
                         selectedUser.getFullName(),

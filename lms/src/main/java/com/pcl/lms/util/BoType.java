@@ -1,5 +1,6 @@
 package com.pcl.lms.util;
 
 public enum BoType {
-    USER
+    USER,
+    STUDENT
 }

@@ -1,5 +1,6 @@
 package com.pcl.lms.dao;
 
+import com.pcl.lms.dao.custom.impl.StudentDaoImpl;
 import com.pcl.lms.dao.custom.impl.UserDaoImpl;
 import com.pcl.lms.util.DaoType;
 
@@ -18,6 +19,8 @@ public class DaoFactory {
         switch (daoType){
             case USER :
                 return(T) new UserDaoImpl();
+            case STUDENT:
+                return (T) new StudentDaoImpl();
             default:
                 return null;
         }
