@@ -1,7 +1,9 @@
 package com.pcl.lms.bo.custom.impl;
 
+import com.pcl.lms.DB.DbConnection;
 import com.pcl.lms.bo.custom.StudentBo;
 import com.pcl.lms.dao.DaoFactory;
+import com.pcl.lms.dao.custom.impl.EnrollDaoImpl;
 import com.pcl.lms.dao.custom.impl.StudentDaoImpl;
 import com.pcl.lms.dto.request.RequestStudentDto;
 import com.pcl.lms.dto.response.ResponesStudentDto;
@@ -13,6 +15,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -20,6 +23,7 @@ import java.util.List;
 
 public class StudentBoImpl implements StudentBo {
     StudentDaoImpl studentDao= DaoFactory.getInstance().getDao(DaoType.STUDENT);
+    EnrollDaoImpl enrollDao=DaoFactory.getInstance().getDao(DaoType.ENROLL);
     @Override
     public boolean saveStudent(RequestStudentDto requestStudentDto) throws SQLException, ClassNotFoundException {
          return studentDao.save(new Student(
@@ -47,4 +51,39 @@ public class StudentBoImpl implements StudentBo {
         }
         return responesStudentDtoList;
     }
+
+    @Override
+    public boolean deleteStudent(String studentId) throws SQLException, ClassNotFoundException {
+        Connection connection= DbConnection.getInstance().getConnection();
+        try {
+            connection.setAutoCommit(false);
+            Boolean isEnrolledDeleted=enrollDao.deleteByStudentId(studentId);
+            boolean isStudentDeleted=studentDao.delete(studentId);
+            if (isEnrolledDeleted && isStudentDeleted){
+                connection.commit();
+                return true;
+            }else {
+                connection.rollback();
+                return false;
+            }
+        }catch (SQLException e){
+            connection.rollback();
+            throw e;
+        }finally {
+            connection.setAutoCommit(true);
+        }
+    }
+
+    @Override
+    public boolean updateStudent(RequestStudentDto requestStudentDto) throws SQLException, ClassNotFoundException {
+        return studentDao.update(new Student(
+                requestStudentDto.getId(),
+                requestStudentDto.getName(),
+                requestStudentDto.getAddress(),
+                Date.valueOf(new SimpleDateFormat("yyyy-MM-dd").format(requestStudentDto.getDob())),
+                "gmail.com"
+        ));
+    }
+
+
 }

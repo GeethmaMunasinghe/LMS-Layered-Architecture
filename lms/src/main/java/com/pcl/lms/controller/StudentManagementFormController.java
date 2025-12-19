@@ -97,6 +97,23 @@ public class StudentManagementFormController {
                         st.getDob(),
                         btnDelete
                 ));
+                btnDelete.setOnAction((event->{
+                    Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Are you sure?",ButtonType.YES,ButtonType.NO);
+                    alert.showAndWait();
+                    if (alert.getResult()==ButtonType.YES){
+                        try {
+                            boolean isDeleted=studentBo.deleteStudent(st.getId());
+                            if (isDeleted){
+                                new Alert(Alert.AlertType.INFORMATION,"Student is deleted...").show();
+                                setTableData(searchText);
+                                setStudentId();
+
+                            }
+                        } catch (SQLException | ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }));
             }
             tblStudent.setItems(studentTmObservableList);
         } catch (SQLException | ClassNotFoundException e) {
@@ -143,13 +160,19 @@ public class StudentManagementFormController {
                     setTableData(searchText);
                 }
             }else {
-                /*if (updateStudent(student,userEmail)){
+                boolean isUpdated=studentBo.updateStudent(new RequestStudentDto(
+                        txtStudentID.getText(),
+                        txtStudentName.getText(),
+                        txtAddress.getText(),
+                        Date.from(dteDOB.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant())
+                ));
+                if (isUpdated){
                     new Alert(Alert.AlertType.INFORMATION,"Student updated").show();
                     setStudentId();
                     clearFields();
                     setTableData(searchText);
                     btnSave.setText("Save");
-                }*/
+                }
             }
         }catch (SQLException|ClassNotFoundException e){
             e.printStackTrace();

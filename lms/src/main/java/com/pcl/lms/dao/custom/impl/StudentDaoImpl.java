@@ -4,6 +4,7 @@ import com.pcl.lms.dao.CrudUtil;
 import com.pcl.lms.dao.custom.StudentDao;
 import com.pcl.lms.entity.Student;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,13 +23,14 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     @Override
-    public boolean update(Student student) {
-        return false;
+    public boolean update(Student student) throws SQLException, ClassNotFoundException {
+       return CrudUtil.execute("UPDATE student SET name=?,address=?,dob=? WHERE id=?",
+               student.getName(),student.getAddress(),student.getDob(),student.getId());
     }
 
     @Override
-    public boolean delete(String s) {
-        return false;
+    public boolean delete(String studentId) throws SQLException, ClassNotFoundException {
+        return CrudUtil.execute("DELETE FROM student WHERE id=?",studentId);
     }
 
     @Override
@@ -56,4 +58,5 @@ public class StudentDaoImpl implements StudentDao {
         }
         return students;
     }
+
 }
