@@ -1,5 +1,6 @@
 package com.pcl.lms.bo;
 
+import com.pcl.lms.bo.custom.impl.ProgramBoImpl;
 import com.pcl.lms.bo.custom.impl.StudentBoImpl;
 import com.pcl.lms.bo.custom.impl.TeacherBoImpl;
 import com.pcl.lms.bo.custom.impl.UserBoImpl;
@@ -25,6 +26,8 @@ public class BoFactory {
                 return (T) new StudentBoImpl();
             case TEACHER:
                 return (T) new TeacherBoImpl();
+            case PROGRAM:
+                return (T) new ProgramBoImpl();
             default:
                 return null;
         }

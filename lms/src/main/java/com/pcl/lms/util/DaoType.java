@@ -4,5 +4,6 @@ public enum DaoType {
     USER,
     STUDENT,
     ENROLL,
-    TEACHER
+    TEACHER,
+    PROGRAM
 }

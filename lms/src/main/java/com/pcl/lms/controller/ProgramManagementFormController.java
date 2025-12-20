@@ -2,10 +2,14 @@ package com.pcl.lms.controller;
 
 import com.pcl.lms.DB.Database;
 import com.pcl.lms.DB.DbConnection;
+import com.pcl.lms.bo.BoFactory;
+import com.pcl.lms.bo.custom.ProgramBo;
+import com.pcl.lms.dto.request.RequestProgramDto;
 import com.pcl.lms.model.Modules;
 import com.pcl.lms.model.Programme;
 import com.pcl.lms.tm.ModulesTM;
 import com.pcl.lms.tm.ProgrammeTm;
+import com.pcl.lms.util.BoType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -48,6 +52,7 @@ public class ProgramManagementFormController {
     static ObservableList<ModulesTM> list=FXCollections.observableArrayList();
     private String searchText="";
     public static String programIdForModules;
+    ProgramBo programBo= BoFactory.getInstance().getBo(BoType.PROGRAM);
 
     public void initialize(){
         colModuleId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -304,11 +309,11 @@ public class ProgramManagementFormController {
         try {
             //save
             if (btnSave.getText().equals("Save")){
-                boolean isSaved=saveProgram(new Programme(
+                programBo.saveProgram(new RequestProgramDto(
                         txtProgramId.getText(),
                         txtProgramName.getText(),
                         Double.parseDouble(txtCost.getText()),
-                        splitId(cbxTeacher.getValue()),
+                        cbxTeacher.getValue(),
                         selectedModules
                 ));
                 setProgrammeId();
