@@ -1,7 +1,9 @@
 package com.pcl.lms.bo;
 
 import com.pcl.lms.bo.custom.impl.StudentBoImpl;
+import com.pcl.lms.bo.custom.impl.TeacherBoImpl;
 import com.pcl.lms.bo.custom.impl.UserBoImpl;
+import com.pcl.lms.dao.custom.impl.TeacherDaoImpl;
 import com.pcl.lms.util.BoType;
 
 public class BoFactory {
@@ -21,6 +23,8 @@ public class BoFactory {
                 return(T) new UserBoImpl();
             case STUDENT:
                 return (T) new StudentBoImpl();
+            case TEACHER:
+                return (T) new TeacherBoImpl();
             default:
                 return null;
         }

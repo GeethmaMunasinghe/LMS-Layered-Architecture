@@ -2,8 +2,12 @@ package com.pcl.lms.controller;
 
 import com.pcl.lms.DB.Database;
 import com.pcl.lms.DB.DbConnection;
+import com.pcl.lms.bo.BoFactory;
+import com.pcl.lms.bo.custom.impl.TeacherBoImpl;
+import com.pcl.lms.dto.request.RequestTeacherDto;
 import com.pcl.lms.model.Teacher;
 import com.pcl.lms.tm.TeacherTM;
+import com.pcl.lms.util.BoType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,6 +42,7 @@ public class TeacherManagementFormController {
     public TableColumn<TeacherTM,String> colAddress;
     public TableColumn<TeacherTM,Button> colOption;
     String searchText="";
+    TeacherBoImpl teacherBo= BoFactory.getInstance().getBo(BoType.TEACHER);
     public void initialize(){
         colID.setCellValueFactory(new PropertyValueFactory<>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -174,7 +179,12 @@ public class TeacherManagementFormController {
         try {
             if (btnSave.getText().equals("Save")){
                 //Save functionality
-                boolean isSaved=saveTeacher(teacher);
+                boolean isSaved=teacherBo.saveTeacher(new RequestTeacherDto(
+                        txtTeacherID.getText(),
+                        txtTeacherName.getText(),
+                        txtContact.getText(),
+                        txtAddress.getText()
+                ));
                 if (isSaved){
                     setTeacherId();
                     setTeacherData(searchText);
