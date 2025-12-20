@@ -8,4 +8,5 @@ import java.util.List;
 public interface TeacherBo {
     public boolean saveTeacher(RequestTeacherDto requestTeacherDto) throws SQLException, ClassNotFoundException;
     public List<RequestTeacherDto> getTeacher(String searchText) throws SQLException, ClassNotFoundException;
+    public boolean updateTeacher(RequestTeacherDto requestTeacherDto)throws SQLException, ClassNotFoundException;
 }

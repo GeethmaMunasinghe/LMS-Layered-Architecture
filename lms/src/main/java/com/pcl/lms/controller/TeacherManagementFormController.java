@@ -194,7 +194,12 @@ public class TeacherManagementFormController {
                 }
 
             }else {
-                boolean isUpdated=updateTeacher(teacher);
+                boolean isUpdated=teacherBo.updateTeacher(new RequestTeacherDto(
+                        txtTeacherID.getText(),
+                        txtTeacherName.getText(),
+                        txtContact.getText(),
+                        txtAddress.getText()
+                ));
                 if (isUpdated){
                     //Update functionality
                     setTeacherData(searchText);
@@ -210,16 +215,6 @@ public class TeacherManagementFormController {
 
     }
 
-    private boolean updateTeacher(Teacher teacher) throws SQLException, ClassNotFoundException {
-        Connection connection=DbConnection.getInstance().getConnection();
-        PreparedStatement ps=connection.prepareStatement(
-                "UPDATE teacher SET name=?,contact=?,address=? WHERE id=?");
-        ps.setString(1,teacher.getName());
-        ps.setString(2,teacher.getContact());
-        ps.setString(3,teacher.getAddress());
-        ps.setString(4,teacher.getId());
-        return ps.executeUpdate()>0;
-    }
 
     private void clearFields() {
         txtTeacherName.clear();

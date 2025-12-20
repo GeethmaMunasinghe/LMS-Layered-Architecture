@@ -23,7 +23,12 @@ public class TeacherDaoImpl implements TeacherDao {
 
     @Override
     public boolean update(Teacher teacher) throws SQLException, ClassNotFoundException {
-        return false;
+        return CrudUtil.execute("UPDATE teacher SET name=?,contact=?,address=? WHERE id=?",
+                teacher.getName(),
+                teacher.getContact(),
+                teacher.getAddress(),
+                teacher.getId()
+        );
     }
 
     @Override

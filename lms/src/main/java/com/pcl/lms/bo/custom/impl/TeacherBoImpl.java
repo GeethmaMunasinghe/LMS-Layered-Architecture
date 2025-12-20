@@ -41,4 +41,14 @@ public class TeacherBoImpl implements TeacherBo {
         return requestTeacherDtos;
     }
 
+    @Override
+    public boolean updateTeacher(RequestTeacherDto requestTeacherDto) throws SQLException, ClassNotFoundException {
+        return teacherDao.update(new Teacher(
+                requestTeacherDto.getId(),
+                requestTeacherDto.getName(),
+                requestTeacherDto.getContact(),
+                requestTeacherDto.getAddress()
+        ));
+    }
+
 }
