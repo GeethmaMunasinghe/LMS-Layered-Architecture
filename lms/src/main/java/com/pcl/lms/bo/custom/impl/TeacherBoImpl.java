@@ -8,6 +8,8 @@ import com.pcl.lms.entity.Teacher;
 import com.pcl.lms.util.DaoType;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TeacherBoImpl implements TeacherBo {
     TeacherDaoImpl teacherDao= DaoFactory.getInstance().getDao(DaoType.TEACHER);
@@ -21,4 +23,22 @@ public class TeacherBoImpl implements TeacherBo {
                 requestTeacherDto.getAddress()
         ));
     }
+
+    @Override
+    public List<RequestTeacherDto> getTeacher(String searchText) throws SQLException, ClassNotFoundException {
+        String txt="%"+searchText+"%";
+        List<Teacher> teachers=teacherDao.fetchTeacherByName(txt);
+        List<RequestTeacherDto> requestTeacherDtos=new ArrayList<>();
+        for (Teacher teacher:teachers){
+            requestTeacherDtos.add(
+                    new RequestTeacherDto(
+                            teacher.getId(),
+                            teacher.getName(),
+                            teacher.getContact(),
+                            teacher.getAddress()
+                    ));
+        }
+        return requestTeacherDtos;
+    }
+
 }

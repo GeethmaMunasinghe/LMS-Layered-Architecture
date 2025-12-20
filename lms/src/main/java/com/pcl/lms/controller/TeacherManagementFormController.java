@@ -24,6 +24,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class TeacherManagementFormController {
@@ -75,10 +76,10 @@ public class TeacherManagementFormController {
 
     private void setTeacherData(String searchText) {
         try {
-            ArrayList<Teacher> teachers =fetchTeachers(searchText);
+            List<RequestTeacherDto> teachers =teacherBo.getTeacher(searchText);
             //load the data into the table
             ObservableList<TeacherTM>teacherObList= FXCollections.observableArrayList();
-            for (Teacher teacher:teachers){
+            for (RequestTeacherDto teacher:teachers){
 
                     Button btn=new Button("Delete");
                     TeacherTM teacherTM=new TeacherTM(
@@ -217,17 +218,6 @@ public class TeacherManagementFormController {
         ps.setString(2,teacher.getContact());
         ps.setString(3,teacher.getAddress());
         ps.setString(4,teacher.getId());
-        return ps.executeUpdate()>0;
-    }
-
-    private boolean saveTeacher(Teacher teacher) throws SQLException, ClassNotFoundException {
-        Connection connection=DbConnection.getInstance().getConnection();
-        PreparedStatement ps=connection.prepareStatement("INSERT INTO teacher VALUES (?,?,?,?)");
-        ps.setString(1,teacher.getId());
-        ps.setString(2,teacher.getName());
-        ps.setString(3,teacher.getContact());
-        ps.setString(4,teacher.getAddress());
-
         return ps.executeUpdate()>0;
     }
 
