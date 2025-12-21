@@ -95,7 +95,7 @@ public class TeacherManagementFormController {
                         alert.showAndWait();
                         if (alert.getResult()==ButtonType.YES){
                             try{
-                                boolean isDeleted=deleteTeacher(teacher.getId());
+                                boolean isDeleted=teacherBo.deleteTeacher(teacher.getId());
                                 if (isDeleted){
                                     setTeacherData(searchText);
                                     setTeacherId();
