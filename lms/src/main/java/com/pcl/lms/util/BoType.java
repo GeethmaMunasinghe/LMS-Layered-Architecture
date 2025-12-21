@@ -4,5 +4,6 @@ public enum BoType {
     USER,
     STUDENT,
     TEACHER,
-    PROGRAM
+    PROGRAM,
+    INTAKE
 }

@@ -75,7 +75,4 @@ public class DashboardFormController {
     public void navigateStudentRegOnAction(ActionEvent actionEvent) throws IOException {
         setUI("RegistrationForm");
     }
-    public void setData(String userEmail){
-        this.userEmail=userEmail;
-    }
 }
