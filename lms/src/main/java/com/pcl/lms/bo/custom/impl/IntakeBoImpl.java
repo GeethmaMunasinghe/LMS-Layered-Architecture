@@ -51,18 +51,32 @@ public class IntakeBoImpl implements IntakeBo {
 
     @Override
     public String getLastIntakeId() throws SQLException, ClassNotFoundException {
-        Intake lastIntake=intakeDao.getLastIntake();
-        if (lastIntake!=null){
-            String lastId=lastIntake.getId();
-            String[] split=lastId.split("-");
-            String lastCharAsString=split[1];
-            int lastDigit=Integer.parseInt(lastCharAsString);
-            lastDigit++;
-            String generatedId="I-"+lastDigit;
-            return generatedId;
-        }else {
-            return "I-1";
+        Intake lastIntake = intakeDao.getLastIntake();
+
+        if (lastIntake == null || lastIntake.getId() == null) {
+            return "I-001";
         }
+
+        String lastId = lastIntake.getId();
+
+        if (!lastId.contains("-")) {
+            return "I-001";
+        }
+
+        String[] split = lastId.split("-");
+
+        if (split.length != 2) {
+            return "I-001";
+        }
+
+        int number;
+        try {
+            number = Integer.parseInt(split[1]);
+        } catch (NumberFormatException e) {
+            return "I-001";
+        }
+
+        return String.format("I-%03d", number + 1);
 
     }
 

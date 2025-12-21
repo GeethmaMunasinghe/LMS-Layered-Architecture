@@ -5,5 +5,6 @@ public enum BoType {
     STUDENT,
     TEACHER,
     PROGRAM,
-    INTAKE
+    INTAKE,
+    REGISTRATION
 }
