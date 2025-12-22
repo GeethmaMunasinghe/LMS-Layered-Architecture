@@ -6,6 +6,7 @@ import com.pcl.lms.bo.BoFactory;
 import com.pcl.lms.bo.custom.UserBo;
 import com.pcl.lms.bo.custom.impl.UserBoImpl;
 import com.pcl.lms.dto.response.ResponseUserDto;
+import com.pcl.lms.env.Session;
 import com.pcl.lms.env.StaticResource;
 import com.pcl.lms.model.User;
 import com.pcl.lms.util.BoType;
@@ -56,6 +57,8 @@ public class LoginFormController {
             if (loginState!=null){
                 if (loginState.getStatusCode()==200){
                     new Alert(Alert.AlertType.INFORMATION,"Login Successful!").show();
+                    Session.setEmail(loginState.getEmail());
+                    Session.getEmail();
                     setUI("DashboardForm");
                 }else {
                     new Alert(Alert.AlertType.ERROR,loginState.getMessage()).show();

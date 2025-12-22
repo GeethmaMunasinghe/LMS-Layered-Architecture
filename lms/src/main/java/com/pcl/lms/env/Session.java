@@ -4,11 +4,11 @@ public class Session {
     private static String email;
 
     public static String getEmail() {
-        return email;
+        return Session.email;
     }
 
     public static void setEmail(String email) {
-        email = email;
+        Session.email = email;
     }
     public static void clear(){
         email=null;

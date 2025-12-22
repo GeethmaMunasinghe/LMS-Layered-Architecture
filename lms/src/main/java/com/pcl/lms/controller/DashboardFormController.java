@@ -1,5 +1,6 @@
 package com.pcl.lms.controller;
 
+import com.pcl.lms.env.Session;
 import com.pcl.lms.env.StaticResource;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -25,6 +26,7 @@ public class DashboardFormController {
     String userEmail;
     public void initialize(){
         setData();
+        System.out.println("DashboardFormController: "+ Session.getEmail());
     }
 
     private void setData() {
