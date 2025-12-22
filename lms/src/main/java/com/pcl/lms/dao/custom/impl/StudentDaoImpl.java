@@ -5,6 +5,7 @@ import com.pcl.lms.dao.custom.StudentDao;
 import com.pcl.lms.entity.Student;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -57,6 +58,13 @@ public class StudentDaoImpl implements StudentDao {
             ));
         }
         return students;
+    }
+
+    @Override
+    public boolean deleteByTransaction(String id, Connection conn) throws SQLException {
+        PreparedStatement ps =conn.prepareStatement("DELETE FROM enroll WHERE student_id=?");
+        ps.setString(1,id);
+        return ps.executeUpdate()>0;
     }
 
 }

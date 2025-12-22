@@ -107,12 +107,15 @@ public class RegistrationFormController {
 
     public void saveOnAction(ActionEvent actionEvent) {
         try {
-            registerBo.registration(new RequestRegisterDto(
+            boolean isSaved=registerBo.registration(new RequestRegisterDto(
                     cmbStudent.getValue(),
                     cmbProgram.getValue(),
                     rbtnPaid.isSelected()
 
             ));
+            if (isSaved){
+                new Alert(Alert.AlertType.INFORMATION,"Registration successfully saved...").show();
+            }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
