@@ -8,6 +8,6 @@ public interface CrudDao<T,ID> extends SuperDao{
     public boolean update(T t) throws SQLException, ClassNotFoundException;
     public boolean delete(ID id) throws SQLException, ClassNotFoundException;
     public ID findById(ID id);
-    public List<T> findAll();
+    public List<T> findAll() throws SQLException, ClassNotFoundException;
 
 }
