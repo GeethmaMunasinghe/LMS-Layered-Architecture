@@ -6,6 +6,7 @@ import com.pcl.lms.bo.BoFactory;
 import com.pcl.lms.bo.custom.ProgramBo;
 import com.pcl.lms.bo.custom.RegisterBo;
 import com.pcl.lms.bo.custom.StudentBo;
+import com.pcl.lms.dto.request.RequestRegisterDto;
 import com.pcl.lms.model.Enroll;
 import com.pcl.lms.model.Programme;
 import com.pcl.lms.model.Student;
@@ -106,34 +107,17 @@ public class RegistrationFormController {
 
     public void saveOnAction(ActionEvent actionEvent) {
         try {
-            boolean isSaved=saveEnrollment(new Enroll(
+            registerBo.registration(new RequestRegisterDto(
                     cmbStudent.getValue(),
                     cmbProgram.getValue(),
                     rbtnPaid.isSelected()
+
             ));
-            if (isSaved){
-                new Alert(Alert.AlertType.INFORMATION,"Success").show();
-            }
-        }catch (SQLException|ClassNotFoundException e){
-            e.printStackTrace();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
-
     }
 
-    private boolean saveEnrollment(Enroll enroll) throws SQLException, ClassNotFoundException {
-        Connection connection=DbConnection.getInstance().getConnection();
-        PreparedStatement ps=connection.prepareStatement("INSERT INTO enroll VALUES (?,?,?)");
-        ps.setString(1,spliteID(enroll.getProgram()));
-        ps.setString(2,spliteID(enroll.getStudent()));
-        ps.setBoolean(3,enroll.isPaid());
-
-        return ps.executeUpdate()>0;
-    }
-
-    private String spliteID(String program) {
-        String[] split=program.split("-");
-        return split[0]+"-"+split[1];
-    }
 
     private void setUI(String location) throws IOException {
         Stage stage=(Stage) context.getScene().getWindow();

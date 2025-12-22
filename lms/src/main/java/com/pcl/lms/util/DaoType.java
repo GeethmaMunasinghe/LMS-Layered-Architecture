@@ -6,5 +6,6 @@ public enum DaoType {
     ENROLL,
     TEACHER,
     PROGRAM,
-    INTAKE
+    INTAKE,
+    REGISTER
 }
