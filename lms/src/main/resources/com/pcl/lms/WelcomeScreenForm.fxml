@@ -9,9 +9,9 @@
 
 <AnchorPane fx:id="context" prefHeight="400.0" prefWidth="497.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pcl.lms.controller.WelcomeScreenFormController">
    <children>
-      <ImageView fitHeight="262.0" fitWidth="504.0" layoutX="-2.0" pickOnBounds="true">
+      <ImageView fitHeight="262.0" fitWidth="508.0" layoutX="-2.0" pickOnBounds="true">
          <image>
-            <Image url="@assets/images/lms_background.jpg" />
+            <Image url="@assets/images/360_F_511653914_hPuG9VVeqRPPDCGqWeK0tpoyIPnEwKfq.jpg" />
          </image>
       </ImageView>
       <Button layoutX="176.0" layoutY="271.0" mnemonicParsing="false" onAction="#navigateLoginFormOnAction" prefHeight="30.0" prefWidth="148.0" style="-fx-background-color: #00b894;" text="Login" textFill="#faf4f4">
